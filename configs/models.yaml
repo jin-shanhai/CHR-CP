@@ -1,0 +1,48 @@
+# CHR-CP Model Pool Configuration (v2 - new tier ladder)
+#
+# Capability-monotonic ladder: T1 (free) -> T2 (cheap) -> T3 (mid) -> T4 (expensive)
+#
+# Cross-vendor boundaries:
+#   T1 <-> T2 : zhipu <-> deepseek    (cross-vendor)
+#   T2 <-> T3 : deepseek <-> deepseek (same-vendor)
+#   T3 <-> T4 : deepseek <-> openai   (cross-vendor)
+
+tiers:
+  T1:
+    model_id: "qwen-turbo"
+    provider: "qwen"
+    mode: "non-thinking"
+    supports_logprobs: false
+    pricing:
+      input_per_M: 0.04
+      output_per_M: 0.085
+
+  T2:
+    model_id: "deepseek-v4-flash"
+    provider: "deepseek"
+    mode: "thinking"
+    supports_logprobs: true
+    pricing:
+      input_per_M: 0.14
+      output_per_M: 0.28
+      cache_hit_per_M: 0.014    # DeepSeek cache hit at 1/10 of input price (post-2026/04/26)
+
+  T3:
+    model_id: "deepseek-v4-pro"
+    provider: "deepseek"
+    mode: "thinking"        # ← 改这一行
+    supports_logprobs: false
+    pricing:
+      input_per_M: 0.44
+      output_per_M: 2.75
+      cache_hit_per_M: 0.044
+
+  T4:
+    model_id: "gpt-5.5"
+    provider: "openai"
+    mode: "non-thinking"
+    supports_logprobs: false
+    pricing:
+      input_per_M: 5.0
+      output_per_M: 30.0
+      cache_hit_per_M: 1.25      # OpenAI cached input at 25% of standard
