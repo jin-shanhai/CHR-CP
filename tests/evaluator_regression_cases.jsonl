@@ -1,0 +1,8 @@
+{"pred": "5", "ref": "x=5", "expected_correct": true, "source": "math_0023", "note": "variable prefix"}
+{"pred": "-2, 1", "ref": "1,-2", "expected_correct": true, "source": "math_0025", "note": "set order"}
+{"pred": "0.5", "ref": "\\frac{1}{2}", "expected_correct": true, "source": "synthetic", "note": "decimal vs fraction"}
+{"pred": "2\\sqrt{2}", "ref": "\\sqrt{8}", "expected_correct": true, "source": "synthetic", "note": "radical simplification"}
+{"pred": "(3, \\frac{\\pi}{2})", "ref": "\\left(3, \\frac{\\pi}{2}\\right)", "expected_correct": true, "source": "math_0000", "note": "left-right wrapper"}
+{"pred": "\\dfrac{14}{3}", "ref": "\\frac{14}{3}", "expected_correct": true, "source": "math_0002", "note": "dfrac vs frac"}
+{"pred": "7", "ref": "5", "expected_correct": false, "source": "synthetic", "note": "truly wrong"}
+{"pred": "B", "ref": "C", "expected_correct": false, "source": "synthetic", "note": "MCQ wrong letter"}
