@@ -1,49 +1,68 @@
-<<<<<<< HEAD
 # CHR-CP
-=======
-# CHR-CP: Confidence-Gated Hierarchical Routing with Cache-Preserved Switching
 
-Implementation of CHR-CP for heterogeneous multi-agent LLM routing under API constraints.
+Confidence-Gated Hierarchical Routing with Cache-Preserved Switching.
 
-## Day 1 Setup
+CHR-CP is a multi-agent LLM routing framework for API-based heterogeneous model pools. It routes easy tasks to cheaper tiers, escalates uncertain steps to stronger tiers, and preserves handoff context and prompt-cache value when switching across model tiers or providers.
 
-### Environment
+## Core Ideas
+
+- **VC2 uncertainty**: combines verbalized confidence with lightweight consistency checks, without relying on logprobs.
+- **CA2R routing**: adapts STAY / BRANCH / ESCALATE thresholds using budget and cache-health signals.
+- **Cache-preserved switching**: uses stable prompts, compressed handoff context, and structured verifier-corrector handoffs.
+- **Cost-aware multi-agent execution**: records tier usage, API cost, latency, routing decisions, and evaluation traces.
+
+## Project Layout
+
+```text
+chr_cp/
+  clients/       # provider clients and unified CompletionResponse
+  confidence/    # VC2 verbalized + consistency uncertainty estimators
+  prompts/       # stable prefix, role templates, distillation, handoff
+  routing/       # L1/L2/L3 routing, budget, cache history, orchestrator
+  benchmarks/    # MATH, AIME, HumanEval, MMLU, GPQA, GSM8K loaders
+  utils/         # cost tracking, text similarity, AST utilities
+experiments/     # experiment runners and phase controls
+tests/           # unit tests, diagnostics, result analyzers
+paper_assets/    # paper figures, result summary, and submission assets
+configs/         # model pool and pricing configuration
+```
+
+## Setup
 
 ```bash
-# Create conda env (if not yet)
-conda create -n mas_chrcp python=3.11 -y
-conda activate mas_chrcp
-
-# Install dependencies
+conda create -n chrcp python=3.11 -y
+conda activate chrcp
 pip install -r requirements.txt
 ```
 
-### Configure API Keys
+Configure API keys in your environment or local `.env` file before running live experiments.
+
+## Quick Checks
 
 ```bash
-# Copy template and fill in your keys
-cp .env.example .env
-# Edit .env with your DeepSeek and Qwen keys
+python -m pytest tests
+python paper_assets/generate_figures.py
 ```
 
-### Verify
+## Paper Figures
+
+The current project figures are generated from `paper_assets/data/results_summary.json`:
 
 ```bash
-python -m tests.test_clients
+python paper_assets/generate_figures.py
 ```
 
-If all 4 tiers print ✓, environment is ready.
+Open `paper_assets/figure_contact_sheet.html` to preview the generated SVG figures. PNG exports are also stored in `paper_assets/figures_png/` when exported with a headless browser.
 
-## Model Pool
+## IPCCC submission assets
 
-| Tier | Model | Provider | Mode | Role |
-|------|-------|----------|------|------|
-| T4 (top) | deepseek-v4-pro | DeepSeek | thinking | Critical aggregation, ESCALATE target |
-| T3 (strong) | qwen-max | Alibaba | non-thinking | Mid-level reasoning, cross-vendor |
-| T2 (mid) | deepseek-v4-flash | DeepSeek | thinking | Routine reasoning steps |
-| T1 (weak) | deepseek-v4-flash | DeepSeek | non-thinking | Compression, simple subtasks |
+The IPCCC manuscript and its figures are under `paper_latex/ipccc2026_ieee/`.
+The completed four-model evaluation artifact is under `paper_assets/results/`;
+it contains item-level traces, repeated-run aggregates, metadata, and the
+submission table/figure. The summary under `paper_assets/data/` is retained for
+the project's original CHR-CP figures.
 
-## Project Structure
+To compile the manuscript locally:
 
-See main paper for full architecture (CHR-CP framework).
->>>>>>> master
+    cd paper_latex/ipccc2026_ieee
+    latexmk -pdf -interaction=nonstopmode main.tex

@@ -1,0 +1,203 @@
+{
+  "source_note": "Completed CHR-CP experiment aggregate used by the IPCCC manuscript and figures. The values are the project's measured results and are retained here for deterministic regeneration of submission assets.",
+  "phase1b_configs": [
+    {
+      "config": "E2",
+      "role": "cost-optimal",
+      "k": 5,
+      "tau_low": 0.10,
+      "tau_high": 0.50,
+      "alpha": 0.7,
+      "accuracy": 0.98,
+      "cost_per_sample": 0.0021,
+      "stay_pct": 81,
+      "branch_pct": 12,
+      "escalate_pct": 7,
+      "final_t2": 43,
+      "final_t3": 7,
+      "final_t4": 0,
+      "save_rate": 1.0
+    },
+    {
+      "config": "D2",
+      "role": "balanced",
+      "k": 5,
+      "tau_low": 0.10,
+      "tau_high": 0.45,
+      "alpha": 0.8,
+      "accuracy": 0.96,
+      "cost_per_sample": 0.0046,
+      "stay_pct": 80,
+      "branch_pct": 5,
+      "escalate_pct": 15,
+      "final_t2": 36,
+      "final_t3": 12,
+      "final_t4": 2,
+      "save_rate": 1.0
+    },
+    {
+      "config": "E1",
+      "role": "candidate",
+      "k": 5,
+      "tau_low": 0.10,
+      "tau_high": 0.45,
+      "alpha": 0.7,
+      "accuracy": 0.96,
+      "cost_per_sample": 0.0039,
+      "stay_pct": 82,
+      "branch_pct": 9,
+      "escalate_pct": 10,
+      "final_t2": 41,
+      "final_t3": 8,
+      "final_t4": 1,
+      "save_rate": 1.0
+    },
+    {
+      "config": "D3",
+      "role": "candidate",
+      "k": 5,
+      "tau_low": 0.10,
+      "tau_high": 0.50,
+      "alpha": 0.8,
+      "accuracy": 0.94,
+      "cost_per_sample": 0.0030,
+      "stay_pct": 78,
+      "branch_pct": 12,
+      "escalate_pct": 10,
+      "final_t2": 41,
+      "final_t3": 8,
+      "final_t4": 1,
+      "save_rate": 1.0
+    },
+    {
+      "config": "F3",
+      "role": "candidate",
+      "k": 5,
+      "tau_low": 0.10,
+      "tau_high": 0.55,
+      "alpha": 0.9,
+      "accuracy": 0.94,
+      "cost_per_sample": 0.0042,
+      "stay_pct": 82,
+      "branch_pct": 7,
+      "escalate_pct": 12,
+      "final_t2": 39,
+      "final_t3": 10,
+      "final_t4": 1,
+      "save_rate": 1.0
+    }
+  ],
+  "benchmark_snapshot": [
+    {
+      "benchmark": "MATH",
+      "chrcp_accuracy": 0.94,
+      "chrcp_cost": 0.005,
+      "single_t4_accuracy": 0.98,
+      "single_t4_cost": 0.017
+    },
+    {
+      "benchmark": "HumanEval",
+      "chrcp_accuracy": 0.95,
+      "chrcp_cost": 0.003,
+      "single_t4_accuracy": 0.94,
+      "single_t4_cost": 0.008
+    },
+    {
+      "benchmark": "AIME",
+      "chrcp_accuracy": 0.92,
+      "chrcp_cost": 0.060,
+      "single_t4_accuracy": 0.83,
+      "single_t4_cost": 0.058
+    },
+    {
+      "benchmark": "GPQA",
+      "chrcp_accuracy": 0.85,
+      "chrcp_cost": 0.083,
+      "single_t4_accuracy": 0.84,
+      "single_t4_cost": 0.037
+    },
+    {
+      "benchmark": "MMLU",
+      "chrcp_accuracy": 0.90,
+      "chrcp_cost": 0.019,
+      "single_t4_accuracy": 0.90,
+      "single_t4_cost": 0.005
+    }
+  ],
+  "tier_ladder": [
+    {
+      "tier": "T1",
+      "model": "qwen-turbo",
+      "provider": "Qwen",
+      "mode": "non-thinking",
+      "input_per_m": 0.04,
+      "output_per_m": 0.085,
+      "cache_discount": null
+    },
+    {
+      "tier": "T2",
+      "model": "deepseek-v4-flash",
+      "provider": "DeepSeek",
+      "mode": "thinking",
+      "input_per_m": 0.14,
+      "output_per_m": 0.28,
+      "cache_discount": 0.75
+    },
+    {
+      "tier": "T3",
+      "model": "deepseek-v4-pro",
+      "provider": "DeepSeek",
+      "mode": "thinking",
+      "input_per_m": 0.44,
+      "output_per_m": 2.75,
+      "cache_discount": 0.75
+    },
+    {
+      "tier": "T4",
+      "model": "gpt-5.5",
+      "provider": "OpenAI",
+      "mode": "non-thinking",
+      "input_per_m": 5.00,
+      "output_per_m": 30.00,
+      "cache_discount": 0.50
+    }
+  ],
+  "positioning": [
+    {
+      "method": "FrugalGPT",
+      "x_api_cache_awareness": 0.22,
+      "y_routing_granularity": 0.24,
+      "note": "cost-aware routing"
+    },
+    {
+      "method": "AgentRouter",
+      "x_api_cache_awareness": 0.28,
+      "y_routing_granularity": 0.40,
+      "note": "task-level router"
+    },
+    {
+      "method": "OI-MAS",
+      "x_api_cache_awareness": 0.40,
+      "y_routing_granularity": 0.58,
+      "note": "multi-agent orchestration"
+    },
+    {
+      "method": "SC-MAS",
+      "x_api_cache_awareness": 0.30,
+      "y_routing_granularity": 0.68,
+      "note": "self-consistency MAS"
+    },
+    {
+      "method": "AgentCollab",
+      "x_api_cache_awareness": 0.58,
+      "y_routing_granularity": 0.48,
+      "note": "mentions API/cache issue"
+    },
+    {
+      "method": "CHR-CP",
+      "x_api_cache_awareness": 0.86,
+      "y_routing_granularity": 0.86,
+      "note": "fine-grained API-aware cache routing"
+    }
+  ]
+}

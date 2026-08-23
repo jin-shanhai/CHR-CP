@@ -117,7 +117,7 @@ def test_distillation_live():
     tracker = CostTracker()
     l3 = L3CacheManager(pool=pool, config=L3Config(), cost_tracker=tracker)
     
-    # Simulated reasoning history (long-ish to trigger distillation)
+    # Long-form reasoning history (long enough to trigger distillation)
     history = """
     Step 1: I need to compute the integral of x^2 * sin(x) from 0 to pi.
     Let me use integration by parts. Let u = x^2, dv = sin(x) dx.

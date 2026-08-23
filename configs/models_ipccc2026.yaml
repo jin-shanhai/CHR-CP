@@ -1,0 +1,40 @@
+# IPCCC evaluation model pool.
+# Pricing is recorded in USD per million tokens and matches
+# paper_assets/results/experiment_metadata.json.
+tiers:
+  T1:
+    model_id: "DeepSeek V4"
+    provider: "deepseek"
+    role: "low-cost draft / probe"
+    latency_seconds_per_call: 0.45
+    pricing:
+      input_per_M: 0.20
+      output_per_M: 0.45
+      cache_input_discount: 0.72
+  T2:
+    model_id: "Grok 4.6"
+    provider: "xai"
+    role: "verification / mid-tier reasoning"
+    latency_seconds_per_call: 0.80
+    pricing:
+      input_per_M: 0.70
+      output_per_M: 2.20
+      cache_input_discount: 0.00
+  T3:
+    model_id: "GPT-5.6 Sol"
+    provider: "openai"
+    role: "strong reasoning / correction"
+    latency_seconds_per_call: 1.35
+    pricing:
+      input_per_M: 3.50
+      output_per_M: 14.00
+      cache_input_discount: 0.25
+  T4:
+    model_id: "Claude Opus 5"
+    provider: "anthropic"
+    role: "frontier escalation"
+    latency_seconds_per_call: 1.90
+    pricing:
+      input_per_M: 5.50
+      output_per_M: 22.00
+      cache_input_discount: 0.20

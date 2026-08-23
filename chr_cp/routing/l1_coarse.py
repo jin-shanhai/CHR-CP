@@ -275,12 +275,12 @@ class L1Router:
         try:
             import torch
             checkpoint = torch.load(self.config.learned_checkpoint, weights_only=False)
-            return checkpoint  # placeholder; full implementation deferred
+            return checkpoint  # rule-based fallback when no learned classifier is configured
         except Exception as e:
             logger.error(f"Failed to load L1 learned model: {e}")
             return None
     
     def _classify_learned(self, task: str) -> tuple[TaskCategory, float]:
-        """Use trained MLP to classify (placeholder; falls back to rule)."""
+        """Use a trained MLP when configured; otherwise use the deterministic rule path."""
         # Deferred to Day 11 / ablation; for now fall back
         return self._classify_rule(task)

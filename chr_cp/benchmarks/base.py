@@ -90,10 +90,13 @@ class Benchmark(ABC):
     @staticmethod
     def cache_dir() -> Path:
         """Default location for cached benchmark data."""
-        # Hard-coded relative to project root
-        # ~/mas_workspace/code/mas_chrcp/cache/benchmarks
-        from pathlib import Path
-        root = Path.home() / "mas_workspace" / "code" / "mas_chrcp"
-        cache = root / "cache" / "benchmarks"
+        # Prefer the repository-bundled cache so a checkout is self-contained.
+        repo_root = Path(__file__).resolve().parents[2]
+        local_cache = repo_root / "mas_chrcp" / "cache" / "benchmarks"
+        if local_cache.exists():
+            return local_cache
+
+        # Keep the historical user cache as a fallback for older installations.
+        cache = Path.home() / "mas_workspace" / "code" / "mas_chrcp" / "cache" / "benchmarks"
         cache.mkdir(parents=True, exist_ok=True)
         return cache

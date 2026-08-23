@@ -1,33 +1,56 @@
-import time
+"""Manual API smoke test.
+
+This module is intentionally inert during pytest collection. Run it directly
+after setting ZHIPU_API_KEY if you want to check the GLM endpoint.
+"""
+
+from __future__ import annotations
+
+import os
 import random
+import time
+
+import pytest
 from openai import OpenAI
 
-client = OpenAI(
-    api_key="your-api-key",
-    base_url="https://open.bigmodel.cn/api/paas/v4"
-)
 
-def call_with_retry(messages, max_retries=5):
+pytestmark = pytest.mark.manual
+
+
+def call_with_retry(client: OpenAI, messages: list[dict[str, str]], max_retries: int = 5):
     for attempt in range(max_retries):
         try:
-            response = client.chat.completions.create(
+            return client.chat.completions.create(
                 model="glm-4.7-flash",
                 messages=messages,
-                # 控制输出长度，减少单次处理时间
-                max_tokens=2048
+                max_tokens=2048,
             )
-            return response
-        except Exception as e:
-            if "1302" in str(e) or "速率限制" in str(e):
-                # 指数退避：1s, 2s, 4s, 8s, 16s...
-                wait_time = (2 ** attempt) + random.uniform(0, 1)
-                print(f"触发速率限制，等待 {wait_time:.1f} 秒后重试...")
-                time.sleep(wait_time)
-            else:
-                raise e
-    raise Exception("超过最大重试次数")
+        except Exception as exc:
+            if "1302" not in str(exc) and "rate limit" not in str(exc).lower():
+                raise
+            wait_time = (2**attempt) + random.uniform(0, 1)
+            print(f"Rate limited; retrying in {wait_time:.1f}s")
+            time.sleep(wait_time)
+    raise RuntimeError("Exceeded maximum retry attempts")
 
-# 批量调用时增加间隔
-for item in data_list:
-    result = call_with_retry([{"role": "user", "content": item}])
-    time.sleep(0.5)  # 每次请求后至少间隔 0.5-1 秒
+
+def main() -> None:
+    api_key = os.getenv("ZHIPU_API_KEY")
+    if not api_key:
+        raise RuntimeError("Set ZHIPU_API_KEY before running this smoke test")
+
+    client = OpenAI(
+        api_key=api_key,
+        base_url="https://open.bigmodel.cn/api/paas/v4",
+    )
+    prompts = [
+        "Say OK and return a short confidence tag.",
+    ]
+    for prompt in prompts:
+        result = call_with_retry(client, [{"role": "user", "content": prompt}])
+        print(result.choices[0].message.content)
+        time.sleep(0.5)
+
+
+if __name__ == "__main__":
+    main()
